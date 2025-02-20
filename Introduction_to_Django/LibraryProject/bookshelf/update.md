@@ -1,9 +1,5 @@
-retrive_book = Book.objects.get(title = "1984")
-
-retrive_book.__dict__
- 
-<!-- {'id': 1,
- 'title': '1984',
- 'author': 'George Orwell',
- 'publication_year': 1949} -->
+retrive_book.title = "Nineteen Eighty-Four"
+retrive_book.save()
+book = Book.objects.get(id = retrive_book.id).title
+<!-- Nineteen Eighty-Four -->
  
