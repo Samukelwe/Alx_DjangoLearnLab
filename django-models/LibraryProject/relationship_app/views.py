@@ -7,6 +7,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from django.views.generic import CreateView
 from django.urls import reverse_lazy
+from django.contrib.auth.decorators import user_passes_test
 
 from .models import Book
 from .models import Library
@@ -54,5 +55,18 @@ def LoginView(request):
 def LogoutView(request):
     logout(request)
     return render(request, "registration/logout.html")
+
+
+@user_passes_test(lambda u: u.userprofile.role == 'Admin')
+def admin_view(request):
+    # Admin view logic
+
+@user_passes_test(lambda u: u.userprofile.role == 'Librarian')
+def librarian_view(request):
+    # Librarian view logic
+
+@user_passes_test(lambda u: u.userprofile.role == 'Member')
+def member_view(request):
+    # Member view logic
 
 
