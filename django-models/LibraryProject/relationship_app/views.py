@@ -70,3 +70,13 @@ def member_view(request):
     # Member view logic
 
 
+def admin_view(request):
+    return render(request, 'relationship_app/admin_view.html')
+
+def librarian_view(request):
+    return render(request, 'relationship_app/librarian_view.html')
+
+def member_view(request):
+    return render(request, 'relationship_app/member_view.html')
+
+
