@@ -8,6 +8,7 @@ from django.contrib import messages
 from django.views.generic import CreateView
 from django.urls import reverse_lazy
 from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.decorators import permission_required
 
 from .models import Book
 from .models import Library
@@ -78,5 +79,18 @@ def librarian_view(request):
 
 def member_view(request):
     return render(request, 'relationship_app/member_view.html')
+
+
+@permission_required('relationship_app.can_add_book')
+def add_book(request):
+    # Add book logic
+
+@permission_required('relationship_app.can_change_book')
+def edit_book(request, book_id):
+    # Edit book logic
+
+@permission_required('relationship_app.can_delete_book')
+def delete_book(request, book_id):
+    # Delete book logic
 
 
