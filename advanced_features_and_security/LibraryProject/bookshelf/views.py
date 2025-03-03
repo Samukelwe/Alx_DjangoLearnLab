@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from .forms import ExampleForm
 
 <<<<<<< HEAD
 from django.contrib.auth.decorators import permission_required
