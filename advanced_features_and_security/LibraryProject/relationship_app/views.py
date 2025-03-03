@@ -61,17 +61,26 @@ def LogoutView(request):
 @user_passes_test(lambda u: u.userprofile.role == 'Admin')
 def admin_view(request):
     # Admin view logic
+<<<<<<< HEAD
     pass
+=======
+>>>>>>> 100fafa8c433f18a4f4d04a8da6a7d3056d4d76d
 
 @user_passes_test(lambda u: u.userprofile.role == 'Librarian')
 def librarian_view(request):
     # Librarian view logic
+<<<<<<< HEAD
     pass
+=======
+>>>>>>> 100fafa8c433f18a4f4d04a8da6a7d3056d4d76d
 
 @user_passes_test(lambda u: u.userprofile.role == 'Member')
 def member_view(request):
     # Member view logic
+<<<<<<< HEAD
     pass
+=======
+>>>>>>> 100fafa8c433f18a4f4d04a8da6a7d3056d4d76d
 
 
 def admin_view(request):
@@ -87,16 +96,25 @@ def member_view(request):
 @permission_required('relationship_app.can_add_book')
 def add_book(request):
     # Add book logic
+<<<<<<< HEAD
     pass
+=======
+>>>>>>> 100fafa8c433f18a4f4d04a8da6a7d3056d4d76d
 
 @permission_required('relationship_app.can_change_book')
 def edit_book(request, book_id):
     # Edit book logic
+<<<<<<< HEAD
     pass
+=======
+>>>>>>> 100fafa8c433f18a4f4d04a8da6a7d3056d4d76d
 
 @permission_required('relationship_app.can_delete_book')
 def delete_book(request, book_id):
     # Delete book logic
+<<<<<<< HEAD
     pass
+=======
+>>>>>>> 100fafa8c433f18a4f4d04a8da6a7d3056d4d76d
 
 
