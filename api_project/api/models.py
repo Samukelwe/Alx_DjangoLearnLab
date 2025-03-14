@@ -1,10 +1,16 @@
 from django.db import models
 
-# Create your models here.
+
+class Author(models.Model):
+    """"
+    Model represents an author
+    """
+    name = models.CharField(max_length=100)
 
 class Book(models.Model):
+    """
+    Model represents a book.
+    """
     title = models.CharField(max_length=100)
-    author = models.CharField(max_length=50)
-
-    def __str__(self):
-        return self.title
+    publication_year = models.IntegerField()
+    author = models.ForeignKey(Author, on_delete=models.CASCADE, related_name='books')
