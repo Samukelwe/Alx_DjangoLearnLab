@@ -16,6 +16,7 @@ from rest_framework import status
 class BookList(generics.ListAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
+    
 
 class BookViewSet(viewsets.ModelViewSet):
     """
@@ -30,7 +31,7 @@ class BookViewSet(viewsets.ModelViewSet):
 class BookListView(ListAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [IsAuthenticatedOrReadOnly, IsAuthenticated]
 
 class BookDetailView(RetrieveAPIView):
     queryset = Book.objects.all()
