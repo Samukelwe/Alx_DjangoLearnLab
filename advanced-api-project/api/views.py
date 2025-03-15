@@ -1,69 +1,50 @@
+
 from django.shortcuts import render
 from rest_framework import generics
-from rest_framework import viewsets
-from rest_framework.permissions import  IsAuthenticatedOrReadOnly, IsAuthenticated
-from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
+from rest_framework.response import Response
+from django_filters.rest_framework import DjangoFilterBackend
+from django_filters import rest_framework
+
+from rest_framework import filters
 from .models import Book
 from .serializers import BookSerializer
-from rest_framework.generics import ListAPIView, RetrieveAPIView, CreateAPIView, UpdateAPIView, DestroyAPIView
-from rest_framework.response import Response
-from rest_framework import status
 
 
-
-
-
-class BookList(generics.ListAPIView):
-    queryset = Book.objects.all()
-    serializer_class = BookSerializer
-    
-
-class BookViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows books to be viewed or edited.
-    Only authenticated users can access this endpoint.
-    """
-    queryset = Book.objects.all()
-    serializer_class = BookSerializer
-    authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]  
-
-class BookListView(ListAPIView):
-    queryset = Book.objects.all()
-    serializer_class = BookSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly, IsAuthenticated]
-
-class BookDetailView(RetrieveAPIView):
-    queryset = Book.objects.all()
-    serializer_class = BookSerializer
+# Create your views here.
+class BookListView(generics.ListAPIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
-
-
-# View for creating a book
-class BookCreateView(CreateAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fileds = ["title", "author", "publication_year"]
+    filter_backends = [filters.SearchFilter]
+    search_fields = ["title", "author"]
+    filter_backends = [rest_framework.filters.OrderingFilter]
+    ordering_fields = ["title", "publication_year"]
+
+
+class BookDetailView(generics.RetrieveAPIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
-
-    def perform_create(self, serializer):
-        
-        serializer.save(author=self.request.user)
-
-# View for updating a book that already exits
-class BookUpdateView(UpdateAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
 
-    def perform_update(self, serializer):
-        # Log the user who updated the book
-        updated_by = self.request.user
-        serializer.save(updated_by=updated_by)
 
-# View for deleting a book
-class BookDeleteView(DestroyAPIView):
+class BookCreateView(generics.CreateAPIView):
+    permission_classes = [IsAuthenticated]
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
+
+
+class BookUpdateView(generics.UpdateAPIView):
+    permission_classes = [IsAuthenticated]
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
+
+
+class BookDeleteView(generics.DestroyAPIView):
+    permission_classes = [IsAuthenticated]
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
 
 
