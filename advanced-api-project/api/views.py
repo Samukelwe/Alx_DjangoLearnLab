@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework import generics
 from rest_framework import viewsets
-from rest_framework.permissions import IsAuthenticated, IsAdminUser  
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly, IsAdminUser  
 from rest_framework.authentication import TokenAuthentication
 from .models import Book
 from .serializers import BookSerializer
@@ -9,6 +9,8 @@ from rest_framework.generics import ListAPIView, RetrieveAPIView, CreateAPIView,
 from rest_framework.response import Response
 from rest_framework import status
 from .permissions import IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly
+
+
 
 
 class BookList(generics.ListAPIView):
