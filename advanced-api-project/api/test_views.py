@@ -4,6 +4,7 @@ from rest_framework.test import APIClient
 from rest_framework import status
 from .models import Book
 
+
 class BookAPITestCase(TestCase):
     def setUp(self):
         self.client = APIClient()
@@ -33,5 +34,3 @@ class BookAPITestCase(TestCase):
     def test_order_books(self):
         response = self.client.get(reverse('book-list') + '?ordering=-publication_year')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-    
