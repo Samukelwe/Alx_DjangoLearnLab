@@ -22,3 +22,16 @@ class Comment(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
 from .post import Post  # Import 'Post' model locally
+
+class Tag(models.Model):
+    name = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.name
+    
+class Post(models.Model):
+    title = models.CharField(max_length=100)
+    content = models.TextField()
+    tags = models.ManyToManyField(Tag)
+
+    # Your existing fields and methods

@@ -1,3 +1,4 @@
+from django.db.models import Q
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
@@ -13,7 +14,6 @@ from .forms import PostForm
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from .models import Comment
 from .forms import CommentForm
-
 
 
 def register(request):
@@ -32,8 +32,6 @@ def profile(request):
     user = request.user
     
     return render(request, 'profile.html', {'user': user})
-
-
 
 
 def login_view(request):
@@ -145,11 +143,6 @@ class CommentUpdateView(LoginRequiredMixin, UpdateView):
         return queryset.filter(author=self.request.user)
     
 
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic.edit import DeleteView
-from django.urls import reverse_lazy
-from .models import Comment
-
 class CommentDeleteView(LoginRequiredMixin, DeleteView):
     model = Comment
     template_name = 'comment_confirm_delete.html'  # Create a template for comment deletion confirmation
@@ -158,3 +151,21 @@ class CommentDeleteView(LoginRequiredMixin, DeleteView):
     def get_queryset(self):
         queryset = super().get_queryset()
         return queryset.filter(author=self.request.user)
+
+
+from django.db.models import Q
+from django.shortcuts import render
+from .models import Post
+
+def search_view(request):
+    query = request.GET.get('q')
+    if query:
+        posts = Post.objects.filter(Q(title__icontains=query) | Q(content__icontains=query) | Q(tags__name__icontains=query)).distinct()
+    else:
+        posts = Post.objects.all()
+    
+    context = {
+        'posts': posts,
+        'query': query
+    }
+    return render(request, 'search_results.html', context)

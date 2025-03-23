@@ -12,3 +12,14 @@
 <p>{{object.author}}</p>
 
 {% endblock content %}
+
+
+<h1>{{ post.title }}</h1>
+<p>{{ post.content }}</p>
+
+<ul>
+    Tags:
+    {% for tag in post.tags.all %}
+        <li><a href="{% url 'tag_posts' tag.name %}">{{ tag.name }}</a></li>
+    {% endfor %}
+</ul>
