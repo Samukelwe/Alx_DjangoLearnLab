@@ -1,4 +1,5 @@
 from django import forms
+from django.forms import widgets
 from .models import Post
 from taggit.forms import TagField, TagWidget
 from .models import Comment, Post
