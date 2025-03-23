@@ -5,6 +5,9 @@ from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.urls import reverse_lazy
+from .models import Post
 
 def register(request):
     if request.method == 'POST':
@@ -50,3 +53,31 @@ def profile_management_view(request):
         # Logic to fetch and display user details
         return HttpResponse("User Profile Page")
 
+class PostListView(ListView):
+    model = Post
+    template_name = 'post_list.html'  # Create this template
+    context_object_name = 'posts'
+
+class PostDetailView(DetailView):
+    model = Post
+    template_name = 'post_detail.html'  # Create this template
+    context_object_name = 'post'
+
+class PostCreateView(CreateView):
+    model = Post
+    template_name = 'post_form.html'  # Create this template
+    fields = ['title', 'content']  # Include fields for title and content
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
+    
+class PostUpdateView(UpdateView):
+    model = Post
+    template_name = 'post_form.html'  # Reuse the post_form template
+    fields = ['title', 'content']
+
+class PostDeleteView(DeleteView):
+    model = Post
+    template_name = 'post_confirm_delete.html'  # Create this template
+    success_url = reverse_lazy('post-list')
