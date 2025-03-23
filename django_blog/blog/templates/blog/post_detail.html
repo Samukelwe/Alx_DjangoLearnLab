@@ -1,0 +1,14 @@
+{% extends 'blog/base.html' %}
+
+{% load static %}
+
+
+{% block content %}
+
+<h1>Welcome to the post detail page</h1>
+<h2>{{object.title}}</h2>
+<p>{{object.content}}</p>
+<p>{{object.published_date}}</p>
+<p>{{object.author}}</p>
+
+{% endblock content %}
