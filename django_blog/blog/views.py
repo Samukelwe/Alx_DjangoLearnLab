@@ -8,6 +8,7 @@ from django.urls import reverse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from .models import Post
+from .forms import PostForm
 
 def register(request):
     if request.method == 'POST':
@@ -81,3 +82,16 @@ class PostDeleteView(DeleteView):
     model = Post
     template_name = 'post_confirm_delete.html'  # Create this template
     success_url = reverse_lazy('post-list')
+
+
+def create_post_view(request):
+    if request.method == 'POST':
+        form = PostForm(request.POST)
+        if form.is_valid():
+            # Process the form data
+            new_post = form.save(commit=False, author=request.user)
+            new_post.save()
+            # Redirect or render a success page
+    else:
+        form = PostForm()
+    return render(request, 'create_post.html', {'form': form})
