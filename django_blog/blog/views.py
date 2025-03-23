@@ -153,10 +153,6 @@ class CommentDeleteView(LoginRequiredMixin, DeleteView):
         return queryset.filter(author=self.request.user)
 
 
-from django.db.models import Q
-from django.shortcuts import render
-from .models import Post
-
 def search_view(request):
     query = request.GET.get('q')
     if query:
@@ -169,3 +165,15 @@ def search_view(request):
         'query': query
     }
     return render(request, 'search_results.html', context)
+
+def tag_filter_view(request, tag_name):
+    tag = Tag.objects.get(name=tag_name)
+    posts = Post.objects.filter(tags=tag)
+    
+    context = {
+        'tag': tag,
+        'posts': posts
+    }
+    return render(request, 'tag_posts.html', context)
+
+
