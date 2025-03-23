@@ -1,5 +1,6 @@
 from django import forms
 from .models import Post
+from .models import Comment
 
 class PostForm(forms.ModelForm):
     class Meta:
@@ -18,3 +19,8 @@ class PostForm(forms.ModelForm):
         if commit:
             instance.save()
         return instance
+    
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['content']  # Fields to be displayed in the form
