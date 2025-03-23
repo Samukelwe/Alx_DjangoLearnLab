@@ -10,6 +10,10 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from django.urls import reverse_lazy
 from .models import Post
 from .forms import PostForm
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from .models import Comment
+from .forms import CommentForm
+
 
 
 def register(request):
@@ -116,3 +120,41 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     def test_func(self):
         post = self.get_object()
         return self.request.user == post.author
+    
+
+class CommentCreateView(LoginRequiredMixin, CreateView):
+    model = Comment
+    form_class = CommentForm
+    template_name = 'comment_create.html'  # Create a template for comment creation
+    success_url = '/'  # Redirect to the homepage after comment creation
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        form.instance.post_id = self.kwargs['post_id']  # Assuming you pass post_id through URL
+        return super().form_valid(form)
+    
+
+class CommentUpdateView(LoginRequiredMixin, UpdateView):
+    model = Comment
+    form_class = CommentForm
+    template_name = 'comment_update.html'  # Create a template for comment update
+    success_url = '/'  # Redirect to the homepage after comment update
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        return queryset.filter(author=self.request.user)
+    
+
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic.edit import DeleteView
+from django.urls import reverse_lazy
+from .models import Comment
+
+class CommentDeleteView(LoginRequiredMixin, DeleteView):
+    model = Comment
+    template_name = 'comment_confirm_delete.html'  # Create a template for comment deletion confirmation
+    success_url = reverse_lazy('home')  # Redirect to a specific URL after comment deletion
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        return queryset.filter(author=self.request.user)
