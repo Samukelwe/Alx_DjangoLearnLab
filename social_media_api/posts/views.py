@@ -4,6 +4,12 @@ from .models import Post, Comment
 from .serializers import PostSerializer, CommentSerializer
 from django_filters import rest_framework as filters
 from rest_framework.permissions import IsAuthenticated
+from rest_framework import status
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.response import Response
+from .models import Post, Like
+from notifications.models import Notification
+
 
 
 class PostViewSet(viewsets.ModelViewSet):
@@ -50,3 +56,35 @@ class FeedView(generics.ListAPIView):
         user = self.request.user
         following_users = user.following.all()
         return Post.objects.filter(author__in=following_users).order_by('-created_at')
+    
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def like_post(request, pk):
+    try:
+        post = Post.objects.get(pk=pk)
+        like, created = Like.objects.get_or_create(user=request.user, post=post)
+        if created:
+            
+            Notification.objects.create(
+                recipient=post.author,
+                actor=request.user,
+                verb='liked your post',
+                target=post
+            )
+            return Response({"message": "Post liked."}, status=status.HTTP_201_CREATED)
+        else:
+            return Response({"message": "You already liked this post."}, status=status.HTTP_400_BAD_REQUEST)
+    except Post.DoesNotExist:
+        return Response({"error": "Post not found."}, status=status.HTTP_404_NOT_FOUND)
+
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def unlike_post(request, pk):
+    try:
+        post = Post.objects.get(pk=pk)
+        like = Like.objects.get(user=request.user, post=post)
+        like.delete()
+        return Response({"message": "Post unliked."}, status=status.HTTP_204_NO_CONTENT)
+    except (Post.DoesNotExist, Like.DoesNotExist):
+        return Response({"error": "Like not found."}, status=status.HTTP_404_NOT_FOUND)
