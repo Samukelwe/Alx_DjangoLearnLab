@@ -39,8 +39,9 @@ class UserLoginView(generics.GenericAPIView):
         serializer.is_valid(raise_exception=True)
         return Response(serializer.validated_data)
     
+
 @api_view(['POST'])
-@permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])  
 def follow_user(request, user_id):
     try:
         user_to_follow = CustomUser.objects.get(id=user_id)
@@ -50,7 +51,7 @@ def follow_user(request, user_id):
         return Response({"error": "User not found."}, status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['POST'])
-@permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])  
 def unfollow_user(request, user_id):
     try:
         user_to_unfollow = CustomUser.objects.get(id=user_id)
@@ -58,5 +59,4 @@ def unfollow_user(request, user_id):
         return Response({"message": "You have unfollowed this user."}, status=status.HTTP_200_OK)
     except CustomUser.DoesNotExist:
         return Response({"error": "User not found."}, status=status.HTTP_404_NOT_FOUND)
-    
 
