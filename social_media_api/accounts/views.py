@@ -60,3 +60,7 @@ def unfollow_user(request, user_id):
     except CustomUser.DoesNotExist:
         return Response({"error": "User not found."}, status=status.HTTP_404_NOT_FOUND)
 
+
+Checks for “Develop views in the accounts app that allow users to follow and unfollow others. This might include actions like followuser and unfollowuser, which update the following relationship.” task
+
+accounts/views.py doesn't contain: ["permissions.IsAuthenticated"]
