@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from rest_framework import viewsets, permissions, generics
 from .models import Post, Comment
 from .serializers import PostSerializer, CommentSerializer
@@ -9,7 +9,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from .models import Post, Like
 from notifications.models import Notification
-from django.shortcuts import get_object_or_404
+
 
 
 class PostViewSet(viewsets.ModelViewSet):
@@ -61,7 +61,6 @@ def like_post(request, pk):
     post = get_object_or_404(Post, pk=pk)  
     like, created = Like.objects.get_or_create(user=request.user, post=post)
     if created:
-        
         Notification.objects.create(
             recipient=post.author,
             actor=request.user,
