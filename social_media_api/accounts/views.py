@@ -7,6 +7,7 @@ from .serializers import UserSerializer, AuthTokenSerializer, UserRegistrationSe
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.decorators import api_view, permission_classes
 from .models import CustomUser
+from rest_framework.permissions import IsAuthenticated 
 
 
 class RegisterView(generics.CreateAPIView):
